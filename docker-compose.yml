@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql
+    container_name: cidadealtarp_db
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./.env
+    volumes:
+      - ./data:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    env_file:
+      - ./.env
