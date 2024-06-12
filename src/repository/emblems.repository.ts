@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Emblems } from '../entities/Emblems';
+import { ListFilter } from 'src/interfaces/emblems.interface';
 
 @Injectable()
 export class EmblemsRepository {
@@ -10,8 +11,15 @@ export class EmblemsRepository {
     private readonly repository: Repository<Emblems>,
   ) {}
 
-  async getEmblems(): Promise<Emblems[]> {
-    return await this.repository.find();
+  async getEmblems(offset: number, data: ListFilter): Promise<Emblems[]> {
+    return await this.repository.find({
+      skip: offset,
+      take: data.itemsPerPage,
+    });
+  }
+
+  async countEmblems(): Promise<number> {
+    return this.repository.count();
   }
 
   async getEmblemsBySlug(slug: string): Promise<Emblems[]> {

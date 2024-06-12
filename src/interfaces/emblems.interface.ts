@@ -16,3 +16,8 @@ export interface AccountsDetails {
   email: string;
   capturedEmblems: string[];
 }
+
+export type ListFilter = {
+  page: number;
+  itemsPerPage: number;
+};

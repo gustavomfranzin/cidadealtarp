@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   EmblemsByUserType,
   EmblemsType,
+  ListFilter,
 } from '../interfaces/emblems.interface';
 import { EmblemsRepository } from '../repository/emblems.repository';
 import { AccountsRepository } from '../repository/accounts.repository';
@@ -30,8 +31,19 @@ export class EmblemsService {
     };
   }
 
-  async getEmblems(): Promise<EmblemsType[]> {
-    return await this.emblemsRepository.getEmblems();
+  async getEmblems(data: ListFilter): Promise<object> {
+    const offset = (data.page - 1) * data.itemsPerPage;
+    const emblems = await this.emblemsRepository.getEmblems(offset, data);
+    const totalItems = await this.emblemsRepository.countEmblems();
+    const pages = Math.ceil(totalItems / data.itemsPerPage);
+
+    return {
+      pages,
+      page: data.page,
+      itemsPerPage: data.itemsPerPage,
+      totalItems,
+      items: emblems,
+    };
   }
 
   async getEmblemsBySlug(userId, slug: string): Promise<EmblemsType[]> {

@@ -42,7 +42,14 @@ export class EmblemsController {
   @Get('/emblems')
   async getEmblems(@Req() req: Request, @Res() res: Response) {
     try {
-      const emblems = await this.emblemService.getEmblems();
+      const { page = 1, itemsPerPage = 10 } = req.query;
+
+      const data = {
+        page: parseInt(page as string),
+        itemsPerPage: parseInt(itemsPerPage as string),
+      };
+
+      const emblems = await this.emblemService.getEmblems(data);
       return res.status(HttpStatus.OK).json(emblems);
     } catch (error) {
       return res
