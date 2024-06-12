@@ -34,7 +34,7 @@ export class EmblemsService {
   async getEmblems(data: ListFilter): Promise<object> {
     const offset = (data.page - 1) * data.itemsPerPage;
     const emblems = await this.emblemsRepository.getEmblems(offset, data);
-    const totalItems = await this.emblemsRepository.countEmblems();
+    const totalItems = await this.emblemsRepository.countEmblems(data);
     const pages = Math.ceil(totalItems / data.itemsPerPage);
 
     return {

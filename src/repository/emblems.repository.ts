@@ -15,16 +15,29 @@ export class EmblemsRepository {
     const options: FindManyOptions<Emblems> = {
       skip: offset,
       take: data.itemsPerPage,
+      where: {},
     };
-    if (typeof data.findByName === 'string' && data.findByName.trim() !== '') {
+    if (
+      typeof data.findByName === 'string' &&
+      data.findByName !== 'undefined'
+    ) {
       options.where = { ...options.where, name: ILike(`%${data.findByName}%`) };
     }
 
     return await this.repository.find(options);
   }
 
-  async countEmblems(): Promise<number> {
-    return this.repository.count();
+  async countEmblems(data: ListFilter): Promise<number> {
+    const options = {
+      where: {},
+    };
+    if (
+      typeof data.findByName === 'string' &&
+      data.findByName !== 'undefined'
+    ) {
+      options.where = { ...options.where, name: ILike(`%${data.findByName}%`) };
+    }
+    return this.repository.count(options);
   }
 
   async getEmblemsBySlug(slug: string): Promise<Emblems[]> {
