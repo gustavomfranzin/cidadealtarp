@@ -1,5 +1,5 @@
 import { Controller, Get, HttpStatus, Put, Req, Res } from '@nestjs/common';
-import { EmblemsService } from './emblems.service';
+import { EmblemsService } from '../services/emblems.service';
 import { Request, Response } from 'express';
 
 @Controller()

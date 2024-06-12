@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { EmblemsByUserType, EmblemsType } from './emblems.interface';
-import { EmblemsRepository } from './emblems.repository';
-import { AccountsRepository } from './accounts.repository';
+import {
+  EmblemsByUserType,
+  EmblemsType,
+} from '../interfaces/emblems.interface';
+import { EmblemsRepository } from '../repository/emblems.repository';
+import { AccountsRepository } from '../repository/accounts.repository';
 
 @Injectable()
 export class EmblemsService {

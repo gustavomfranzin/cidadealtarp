@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmblemsController } from './emblems.controller';
-import { EmblemsService } from './emblems.service';
-import { EmblemsRepository } from './emblems.repository';
+import { EmblemsService } from '../services/emblems.service';
+import { EmblemsRepository } from '../repository/emblems.repository';
 
 describe('EmblemsController', () => {
   let emblemsController: EmblemsController;
