@@ -18,6 +18,7 @@ export interface AccountsDetails {
 }
 
 export type ListFilter = {
+  findByName?: string | null;
   page: number;
   itemsPerPage: number;
 };

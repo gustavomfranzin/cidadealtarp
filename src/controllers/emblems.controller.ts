@@ -42,9 +42,10 @@ export class EmblemsController {
   @Get('/emblems')
   async getEmblems(@Req() req: Request, @Res() res: Response) {
     try {
-      const { page = 1, itemsPerPage = 10 } = req.query;
+      const { page = 1, itemsPerPage = 10, findByName } = req.query;
 
       const data = {
+        findByName: String(findByName),
         page: parseInt(page as string),
         itemsPerPage: parseInt(itemsPerPage as string),
       };
