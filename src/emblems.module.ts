@@ -5,10 +5,12 @@ import { DatabaseModule } from './infra/db';
 import { EmblemsRepository } from './emblems.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Emblems } from './entities/Emblems';
+import { AccountsRepository } from './accounts.repository';
+import { Accounts } from './entities/Accounts';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([Emblems])],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([Emblems, Accounts])],
   controllers: [EmblemsController],
-  providers: [EmblemsService, EmblemsRepository],
+  providers: [EmblemsService, EmblemsRepository, AccountsRepository],
 })
 export class EmblemsModule {}

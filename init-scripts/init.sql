@@ -6,6 +6,15 @@ CREATE TABLE IF NOT EXISTS emblems (
     Image TEXT
 );
 
+-- Criação da tabela accounts
+CREATE TABLE accounts (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    Email VARCHAR(255),
+    Password VARCHAR(255),
+    CapturedEmblems VARCHAR(255)
+);
+
 -- Inserção de dados na tabela emblems
 INSERT INTO emblems (Id, Slug, Name, Image) VALUES
 (1, 'cda', 'Cidade Alta', 'https://cidadealtarp.com/imagens/challenge/cidade-alta.png'),

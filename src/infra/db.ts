@@ -7,6 +7,7 @@ import {
   MYSQL_HOST,
   PMA_PORT,
 } from 'config';
+import { Accounts } from 'src/entities/Accounts';
 import { Emblems } from 'src/entities/Emblems';
 
 @Module({
@@ -19,7 +20,7 @@ import { Emblems } from 'src/entities/Emblems';
       password: MYSQL_PASSWORD,
       database: MYSQL_DATABASE,
       synchronize: false,
-      entities: [Emblems],
+      entities: [Emblems, Accounts],
     }),
   ],
   exports: [TypeOrmModule],
