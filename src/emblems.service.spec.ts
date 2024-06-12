@@ -34,7 +34,7 @@ describe('EmblemsService', () => {
 
   const mockEmblemsRepository = () => ({
     getEmblems: jest.fn().mockResolvedValue(mockEmblems),
-    getEmblemsBySlug: jest.fn().mockImplementation((slug: string) => {
+    getEmblemsBySlug: jest.fn().mockImplementation(() => {
       return mockEmblem;
     }),
   });
