@@ -22,4 +22,18 @@ export class EmblemsController {
         .json({ message: 'Erro ao obter emblemas', error });
     }
   }
+
+  @Get('/emblems/:slug')
+  async getEmblemsBySlug(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { slug } = req.params;
+
+      const emblem = await this.emblemService.getEmblemsBySlug(slug);
+      return res.status(HttpStatus.OK).json(emblem);
+    } catch (error) {
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Erro ao obter emblemas', error });
+    }
+  }
 }

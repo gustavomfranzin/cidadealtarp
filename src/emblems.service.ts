@@ -12,4 +12,8 @@ export class EmblemsService {
   async getEmblems(): Promise<EmblemsType[]> {
     return await this.emblemsRepository.getEmblems();
   }
+
+  async getEmblemsBySlug(slug: string): Promise<EmblemsType[]> {
+    return await this.emblemsRepository.getEmblemsBySlug(slug);
+  }
 }

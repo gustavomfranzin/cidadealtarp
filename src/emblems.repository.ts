@@ -13,4 +13,8 @@ export class EmblemsRepository {
   async getEmblems(): Promise<Emblems[]> {
     return await this.repository.find();
   }
+
+  async getEmblemsBySlug(slug: string): Promise<Emblems[]> {
+    return await this.repository.find({ where: { slug: slug } });
+  }
 }
