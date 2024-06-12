@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EmblemsType } from './emblems.interface';
+import { EmblemsByUserType, EmblemsType } from './emblems.interface';
 import { EmblemsRepository } from './emblems.repository';
 import { AccountsRepository } from './accounts.repository';
 
@@ -11,6 +11,20 @@ export class EmblemsService {
   ) {}
   getHello(): string {
     return 'Hello World!';
+  }
+
+  async getEmblemsByUserId(userId): Promise<EmblemsByUserType> {
+    const emblemsCapturedByUserId =
+      await this.accountsRepository.getEmblemsByUserId(userId);
+    const slugs = emblemsCapturedByUserId.capturedEmblems;
+
+    const emblems = await this.emblemsRepository.getManyEmblemsBySlug(slugs);
+
+    return {
+      name: emblemsCapturedByUserId.name,
+      email: emblemsCapturedByUserId.email,
+      capturedEmblems: emblems,
+    };
   }
 
   async getEmblems(): Promise<EmblemsType[]> {

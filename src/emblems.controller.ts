@@ -11,6 +11,34 @@ export class EmblemsController {
     return this.emblemService.getHello();
   }
 
+  @Get('/:userId/emblems')
+  async getEmblemsByUserId(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { userId } = req.params;
+
+      if (!userId) {
+        return res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: 'ID do usuário não fornecido' });
+      }
+
+      const emblems = await this.emblemService.getEmblemsByUserId(userId);
+      return res.status(HttpStatus.OK).json(emblems);
+    } catch (error) {
+      let errorMessage = 'Erro ao obter emblemas';
+
+      if (error.message === 'Nenhum emblema encontrado') {
+        errorMessage = 'Nenhum emblema encontrado';
+      } else if (error.message === 'Usuário não encontrado') {
+        errorMessage = 'Usuário não encontrado';
+      }
+
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: errorMessage });
+    }
+  }
+
   @Get('/emblems')
   async getEmblems(@Req() req: Request, @Res() res: Response) {
     try {

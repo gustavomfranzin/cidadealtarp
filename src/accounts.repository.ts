@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Accounts } from './entities/Accounts';
+import { AccountsDetails } from './emblems.interface';
 
 @Injectable()
 export class AccountsRepository {
@@ -9,6 +10,27 @@ export class AccountsRepository {
     @InjectRepository(Accounts)
     private readonly repository: Repository<Accounts>,
   ) {}
+
+  async getEmblemsByUserId(userId): Promise<AccountsDetails | null> {
+    const user = await this.repository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    if (!user.capturedEmblems) {
+      throw new Error('Nenhum emblema encontrado');
+    }
+
+    const capturedEmblems = user.capturedEmblems.split(',') || [];
+    return {
+      name: user.name,
+      email: user.email,
+      capturedEmblems: capturedEmblems,
+    };
+  }
 
   async getUserByIdAndSlug(userId, slug: string): Promise<boolean> {
     const user = await this.repository.findOne({
