@@ -1,17 +1,29 @@
 import { Controller, Get, HttpStatus, Put, Req, Res } from '@nestjs/common';
 import { EmblemsService } from '../services/emblems.service';
 import { Request, Response } from 'express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('emblems')
 @Controller()
 export class EmblemsController {
   constructor(private readonly emblemService: EmblemsService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Verifica se a api está disponível' })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna "Hello World"',
+  })
   getHello(): string {
     return this.emblemService.getHello();
   }
 
   @Get('/:userId/emblems')
+  @ApiOperation({ summary: 'Obtém emblemas resgatados do usuário' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todos emblemas de um usuário',
+  })
   async getEmblemsByUserId(@Req() req: Request, @Res() res: Response) {
     try {
       const { userId } = req.params;
@@ -40,6 +52,11 @@ export class EmblemsController {
   }
 
   @Get('/emblems')
+  @ApiOperation({ summary: 'Obtém todos os emblemas' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todos emblemas',
+  })
   async getEmblems(@Req() req: Request, @Res() res: Response) {
     try {
       const { page = 1, itemsPerPage = 10, findByName } = req.query;
@@ -60,6 +77,14 @@ export class EmblemsController {
   }
 
   @Put('/emblems/:slug')
+  @ApiOperation({
+    summary:
+      'Lista o emblema e resgata o emblema caso usuário não tenha resgatado antes',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista todos emblemas',
+  })
   async getEmblemsBySlug(@Req() req: Request, @Res() res: Response) {
     try {
       const { slug } = req.params;
