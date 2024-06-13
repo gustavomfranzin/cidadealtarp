@@ -58,7 +58,9 @@ Abaixo estão instruções sobre como acessar a documentação da API deste proj
 
 Acesse a documentação da API Swagger para explorar endpoints e realizar testes:
 
-[Swagger API Documentation](http://localhost:API_PORT/api/docs#/)
+[Swagger API Documentation](https://swagger.io/docs/)
+
+### http://localhost:API_PORT/api/docs#/
 
 ### O que você pode encontrar na documentação?
 
