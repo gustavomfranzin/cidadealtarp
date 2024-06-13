@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
   EmblemsByUserType,
   EmblemsType,
@@ -17,6 +17,26 @@ export class EmblemsService {
     return 'Hello World!';
   }
 
+  async getEmblems(data: ListFilter): Promise<object> {
+    const offset = (data.page - 1) * data.itemsPerPage;
+
+    try {
+      const emblems = await this.emblemsRepository.getEmblems(offset, data);
+      const totalItems = await this.emblemsRepository.countEmblems(data);
+      const pages = Math.ceil(totalItems / data.itemsPerPage);
+
+      return {
+        pages,
+        page: data.page,
+        itemsPerPage: data.itemsPerPage,
+        totalItems,
+        items: emblems,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao buscar emblemas');
+    }
+  }
+
   async getEmblemsByUserId(userId): Promise<EmblemsByUserType> {
     const emblemsCapturedByUserId =
       await this.accountsRepository.getEmblemsByUserId(userId);
@@ -28,21 +48,6 @@ export class EmblemsService {
       name: emblemsCapturedByUserId.name,
       email: emblemsCapturedByUserId.email,
       capturedEmblems: emblems,
-    };
-  }
-
-  async getEmblems(data: ListFilter): Promise<object> {
-    const offset = (data.page - 1) * data.itemsPerPage;
-    const emblems = await this.emblemsRepository.getEmblems(offset, data);
-    const totalItems = await this.emblemsRepository.countEmblems(data);
-    const pages = Math.ceil(totalItems / data.itemsPerPage);
-
-    return {
-      pages,
-      page: data.page,
-      itemsPerPage: data.itemsPerPage,
-      totalItems,
-      items: emblems,
     };
   }
 

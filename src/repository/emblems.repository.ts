@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, In, Repository } from 'typeorm';
 import { Emblems } from '../entities/Emblems';
@@ -24,7 +24,17 @@ export class EmblemsRepository {
       options.where = { ...options.where, name: ILike(`%${data.findByName}%`) };
     }
 
-    return await this.repository.find(options);
+    try {
+      const result = await this.repository.find(options);
+      if (!result) {
+        return [];
+      }
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao buscar emblemas no banco de dados',
+      );
+    }
   }
 
   async countEmblems(data: ListFilter): Promise<number> {
@@ -37,7 +47,14 @@ export class EmblemsRepository {
     ) {
       options.where = { ...options.where, name: ILike(`%${data.findByName}%`) };
     }
-    return this.repository.count(options);
+    try {
+      const result = this.repository.count(options);
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao contar emblemas no banco de dados',
+      );
+    }
   }
 
   async getEmblemsBySlug(slug: string): Promise<Emblems[]> {
