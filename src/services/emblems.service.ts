@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   EmblemsByUserType,
   EmblemsType,
@@ -38,24 +43,30 @@ export class EmblemsService {
   }
 
   async getEmblemsByUserId(userId): Promise<EmblemsByUserType> {
-    const emblemsCapturedByUserId =
-      await this.accountsRepository.getEmblemsByUserId(userId);
-    const slugs = emblemsCapturedByUserId.capturedEmblems;
+    try {
+      const emblemsCapturedByUserId =
+        await this.accountsRepository.getEmblemsByUserId(userId);
+      const slugs = emblemsCapturedByUserId.capturedEmblems;
 
-    const emblems = await this.emblemsRepository.getManyEmblemsBySlug(slugs);
+      const emblems = await this.emblemsRepository.getManyEmblemsBySlug(slugs);
 
-    return {
-      name: emblemsCapturedByUserId.name,
-      email: emblemsCapturedByUserId.email,
-      capturedEmblems: emblems,
-    };
+      return {
+        name: emblemsCapturedByUserId.name,
+        email: emblemsCapturedByUserId.email,
+        capturedEmblems: emblems,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao buscar emblemas do usuário',
+      );
+    }
   }
 
   async getEmblemsBySlug(userId, slug: string): Promise<EmblemsType[]> {
     const emblem = await this.emblemsRepository.getEmblemsBySlug(slug);
 
     if (emblem.length === 0) {
-      throw new Error('Emblema não encontrado');
+      throw new NotFoundException('Emblema não encontrado');
     }
 
     const capturedEmblems = await this.accountsRepository.getUserByIdAndSlug(
@@ -64,7 +75,7 @@ export class EmblemsService {
     );
 
     if (capturedEmblems) {
-      throw new Error('Emblema já capturado pelo usuário');
+      throw new ConflictException('Emblema já capturado pelo usuário');
     }
 
     await this.accountsRepository.updateEmblemForUser(userId, slug);

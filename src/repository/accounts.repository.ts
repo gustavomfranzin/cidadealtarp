@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Accounts } from '../entities/Accounts';
@@ -17,11 +17,15 @@ export class AccountsRepository {
     });
 
     if (!user) {
-      throw new Error('Usuário não encontrado');
+      throw new NotFoundException('Usuário não encontrado');
     }
 
     if (!user.capturedEmblems) {
-      throw new Error('Nenhum emblema encontrado');
+      return {
+        name: user.name,
+        email: user.email,
+        capturedEmblems: [],
+      };
     }
 
     const capturedEmblems = user.capturedEmblems.split(',') || [];
@@ -37,6 +41,10 @@ export class AccountsRepository {
       where: { id: userId },
     });
 
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
     const capturedEmblems = user.capturedEmblems || [];
     return capturedEmblems.includes(slug);
   }
@@ -45,7 +53,7 @@ export class AccountsRepository {
     const user = await this.repository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new Error('Usuário não encontrado');
+      throw new NotFoundException('Usuário não encontrado');
     }
 
     let newCapturedEmblems = slug;
