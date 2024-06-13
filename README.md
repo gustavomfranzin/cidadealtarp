@@ -20,7 +20,7 @@ git clone git@github.com:gustavomfranzin/cidadealtarp.git
 ```bash
 pnpm install
 ```
-3. Crie um arquivo .env e preencha de acordo com o .env.sampla
+3. Crie um arquivo .env e preencha de acordo com o .env.sample
 ```bash
 MYSQL_DATABASE=
 MYSQL_USER=
