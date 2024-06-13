@@ -22,13 +22,13 @@ pnpm install
 ```
 3. Crie um arquivo .env e preencha de acordo com o .env.sample
 ```bash
-MYSQL_DATABASE=
+MYSQL_DATABASE="localhost"
 MYSQL_USER=
 MYSQL_PASSWORD=
 MYSQL_ROOT_PASSWORD=
-PMA_HOST=
-PMA_PORT=
-API_PORT=
+PMA_HOST="cidadealtarp_db"
+PMA_PORT=3306
+API_PORT=9000
 ```
 4. Execute o banco de dados mysql através do docker:
 ```bash
