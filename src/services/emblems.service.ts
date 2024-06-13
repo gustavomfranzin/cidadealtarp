@@ -44,18 +44,20 @@ export class EmblemsService {
 
   async getEmblemsByUserId(userId): Promise<EmblemsByUserType> {
     try {
-      const emblemsCapturedByUserId =
-        await this.accountsRepository.getEmblemsByUserId(userId);
-      const slugs = emblemsCapturedByUserId.capturedEmblems;
+      const user = await this.accountsRepository.getEmblemsByUserId(userId);
+      const slugs = user.capturedEmblems;
 
       const emblems = await this.emblemsRepository.getManyEmblemsBySlug(slugs);
 
       return {
-        name: emblemsCapturedByUserId.name,
-        email: emblemsCapturedByUserId.email,
+        name: user.name,
+        email: user.email,
         capturedEmblems: emblems,
       };
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
       throw new InternalServerErrorException(
         'Erro ao buscar emblemas do usuário',
       );

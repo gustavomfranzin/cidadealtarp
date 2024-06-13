@@ -116,10 +116,11 @@ export class EmblemsController {
         return res
           .status(HttpStatus.NOT_FOUND)
           .json({ message: error.message });
+      } else {
+        return res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ message: error.message });
       }
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Erro interno durante a requisição' });
     }
   }
 
